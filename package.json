@@ -1,6 +1,6 @@
 {
   "name": "bilibili-live-suit-emoji",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "在 B 站直播间发送装扮表情弹幕",
   "keywords": [
     "bilibili",
