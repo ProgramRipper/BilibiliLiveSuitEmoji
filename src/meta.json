@@ -1,5 +1,6 @@
 {
     "name": "B 站直播装扮表情",
+    "namespace": "ProgramRipper",
     "version": "0.1.0",
     "author": "ProgramRipper",
     "license": "MIT",

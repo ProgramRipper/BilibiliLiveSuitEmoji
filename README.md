@@ -13,9 +13,9 @@
 
 ### 2. 安装脚本
 
-| ghproxy 源                                                                                                                                   | GitHub 源                                                                                                                |
-| -------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| [安装](https://ghproxy.com/https://github.com/ProgramRipper/BilibiliLiveSuitEmoji/releases/latest/download/bilibili-live-suit-emoji.user.js) | [安装](https://github.com/ProgramRipper/BilibiliLiveSuitEmoji/releases/latest/download/bilibili-live-suit-emoji.user.js) |
+| ghproxy 源                                                                                                                                   | GitHub 源                                                                                                                | Greasy Fork 源                                                                                                        |
+| -------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
+| [安装](https://ghproxy.com/https://github.com/ProgramRipper/BilibiliLiveSuitEmoji/releases/latest/download/bilibili-live-suit-emoji.user.js) | [安装](https://github.com/ProgramRipper/BilibiliLiveSuitEmoji/releases/latest/download/bilibili-live-suit-emoji.user.js) | [安装](https://greasyfork.org/zh-CN/scripts/459780-b-%E7%AB%99%E7%9B%B4%E6%92%AD%E8%A3%85%E6%89%AE%E8%A1%A8%E6%83%85) |
 
 ## 开源协议
 
