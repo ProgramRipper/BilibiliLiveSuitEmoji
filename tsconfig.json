@@ -1,28 +1,26 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
     "compilerOptions": {
-        "outDir": "./dist/",
+        "strict": true,
+        "baseUrl": ".",
+        "module": "CommonJS",
         "moduleResolution": "node",
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "skipLibCheck": true,
+        "paths": {
+            "@/*": [
+                "src/*"
+            ]
+        },
         "resolveJsonModule": true,
+        "outDir": "./dist/",
+        "sourceMap": true,
+        "esModuleInterop": true,
         "lib": [
             "ESNext",
             "DOM",
             "DOM.Iterable"
         ],
-        "module": "CommonJS",
         "target": "ESNext",
-        "strict": false,
-        "noImplicitAny": false,
-        "sourceMap": true,
-        "baseUrl": ".",
-        "paths": {
-            "@/*": [
-                "src/*"
-            ]
-        }
+        "skipLibCheck": true
     },
     "include": [
         "src/**/*"
