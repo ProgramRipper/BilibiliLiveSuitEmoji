@@ -1,0 +1,22 @@
+{
+    "name": "B 站直播装扮表情",
+    "version": "0.1.0",
+    "author": "ProgramRipper",
+    "license": "MIT",
+    "description": "在 B 站直播间发送装扮表情弹幕",
+    "homepage": "https://github.com/ProgramRipper/BilibiliLiveSuitEmoji",
+    "icon": "https://www.bilibili.com/favicon.ico",
+    "updateURL": "https://ghproxy.com/https://github.com/ProgramRipper/BilibiliLiveSuitEmoji/releases/latest/download/bilibili-live-suit-emoji.user.js",
+    "downloadURL": "https://ghproxy.com/https://github.com/ProgramRipper/BilibiliLiveSuitEmoji/releases/latest/download/bilibili-live-suit-emoji.user.js",
+    "supportURL": "https://github.com/ProgramRipper/BilibiliLiveSuitEmoji/issues",
+    "match": [
+        "*://live.bilibili.com/*"
+    ],
+    "exclude": [
+        "*://live.bilibili.com/p/*"
+    ],
+    "connect": [
+        "api.bilibili.com",
+        "*"
+    ]
+}
