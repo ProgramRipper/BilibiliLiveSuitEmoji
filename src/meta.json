@@ -19,5 +19,6 @@
     "connect": [
         "api.bilibili.com",
         "*"
-    ]
+    ],
+    "run-at": "document-start"
 }

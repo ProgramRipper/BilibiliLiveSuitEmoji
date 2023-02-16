@@ -1,34 +1,29 @@
-interface EmoteResp {
-  data: EmoteData
-}
-
-interface EmoteData {
-  packages: Package[]
-}
-
 interface Package {
   id: number
   text: string
   url: string
   type: number
   emote: Emote[]
+  ref_mid: number
 }
 
 interface Emote {
   id: number
   text: string
   url: string
-  meta: EmoteMeta
+  meta: Meta
+  flags: Flags
 }
 
-interface EmoteMeta {
+interface Meta {
   alias?: string
 }
 
+interface Flags {
+  unlocked: boolean
+}
+
 interface EmoticonResp {
-  code: number
-  message: string
-  ttl: number
   data: EmoticonData
 }
 
@@ -62,6 +57,48 @@ interface Emoticon {
 (() => {
   'use strict'
 
+  const packages: Package[] = []
+
+  void (async () => {
+    const roomid: number = parseInt(window.location.pathname.match(/\/(\d+)/)?.[1] ?? '0')
+
+    const [uid, userPackages]: [number, Package[]] = await Promise.all([
+      (
+        await (
+          await fetch(
+            `https://api.live.bilibili.com/xlive/web-room/v2/index/getRoomPlayInfo?room_id=${roomid}`,
+            { credentials: 'include' }
+          )
+        ).json()
+      ).data.uid,
+
+      (
+        await (
+          await fetch(
+            'https://api.bilibili.com/x/emote/user/panel/web?business=reply',
+            { credentials: 'include' }
+          )
+        ).json()
+      ).data.packages
+    ])
+
+    const roomPackages: Package[] = (await (
+      await fetch(
+        `https://api.bilibili.com/x/emote/creation/package/list?build=7160300&business=reply&mobi_app=android&up_mid=${uid}`,
+        { credentials: 'include' }
+      )
+    ).json()).data.list.filter(
+      (item: Package) => item.type === 11 && item.emote[0].flags.unlocked
+    )
+
+    if (roomPackages.length > 0) {
+      packages.push(...roomPackages)
+    }
+
+    packages.push(...userPackages.filter((item: Package) => item.type !== 4 && item.ref_mid !== uid))
+  }
+  )()
+
   let responseText: string | null = null
   const originOpen = XMLHttpRequest.prototype.open
 
@@ -73,69 +110,60 @@ interface Emoticon {
     username?: string,
     password?: string
   ) {
-    if (
-      method === 'GET' &&
-      new URL(
-        url.match(/^https?:/) === null ? 'https:' + url : url
-      ).pathname === '/xlive/web-ucenter/v2/emoticon/GetEmoticons'
-    ) {
-      const getter = Object.getOwnPropertyDescriptor(XMLHttpRequest.prototype, 'responseText')?.get
+    if (method === 'GET') {
+      const { host, pathname } = new URL(url.startsWith('//') ? 'https:' + url : url)
 
-      Object.defineProperty(this, 'responseText', {
-        get () {
-          if (responseText === null) {
-            const resp: EmoticonResp = JSON.parse(getter?.call(this))
+      if (host === 'api.live.bilibili.com' && pathname === '/xlive/web-ucenter/v2/emoticon/GetEmoticons') {
+        const getter = Object.getOwnPropertyDescriptor(XMLHttpRequest.prototype, 'responseText')?.get
 
-            const request = new XMLHttpRequest()
-            originOpen.call(request,
-              'GET',
-              'https://api.bilibili.com/x/emote/user/panel/web?business=reply',
-              false
-            )
-            request.withCredentials = true
-            request.send()
-            const result: EmoteResp = JSON.parse(request.responseText)
-
-            for (const packages of result.data.packages) {
-              if (packages.type === 4) {
-                continue
+        Object.defineProperty(this, 'responseText', {
+          get () {
+            if (responseText === null) {
+              if (packages.length === 0) {
+                return getter?.call(this)
               }
 
-              const datum: Datum = {
-                emoticons: [],
-                pkg_id: packages.id,
-                pkg_name: packages.text,
-                pkg_type: 2,
-                current_cover: packages.url,
-                recently_used_emoticons: []
-              }
+              const resp: EmoticonResp = JSON.parse(getter?.call(this))
 
-              for (const emote of packages.emote) {
-                const emoticon: Emoticon = {
-                  emoji: emote.meta.alias === undefined ? emote.text : emote.meta.alias,
-                  url: emote.url,
-                  width: 162,
-                  height: 162,
-                  perm: 1,
-                  unlock_need_level: 0,
-                  bulge_display: 1,
-                  emoticon_unique: 'upower_' + emote.text,
-                  emoticon_id: emote.id
+              for (const pack of packages) {
+                const datum: Datum = {
+                  emoticons: [],
+                  pkg_id: pack.id,
+                  pkg_name: pack.text,
+                  pkg_type: 2,
+                  current_cover: pack.url,
+                  recently_used_emoticons: []
                 }
-                datum.emoticons.push(emoticon)
+
+                for (const emote of pack.emote) {
+                  const emoticon: Emoticon = {
+                    emoji: emote.meta.alias === undefined ? emote.text : emote.meta.alias,
+                    url: emote.url,
+                    width: 162,
+                    height: 162,
+                    perm: 1,
+                    unlock_need_level: 0,
+                    bulge_display: 1,
+                    emoticon_unique: 'upower_' + emote.text,
+                    emoticon_id: emote.id
+                  }
+                  datum.emoticons.push(emoticon)
+                }
+
+                resp.data.data.push(datum)
               }
 
-              resp.data.data.push(datum)
+              responseText = JSON.stringify(resp)
             }
 
-            responseText = JSON.stringify(resp)
+            return responseText
           }
-
-          return responseText
         }
-      })
+        )
+      }
     }
 
     originOpen.call(this, method, url, async === undefined ? true : async, username, password)
   }
-})()
+}
+)()
