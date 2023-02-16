@@ -136,6 +136,6 @@ interface Emoticon {
       })
     }
 
-    originOpen.call(this, method, url, async === undefined ? false : async, username, password)
+    originOpen.call(this, method, url, async === undefined ? true : async, username, password)
   }
 })()
