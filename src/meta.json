@@ -1,7 +1,7 @@
 {
     "name": "B 站直播装扮表情",
     "namespace": "ProgramRipper",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "author": "ProgramRipper",
     "license": "MIT",
     "description": "在 B 站直播间发送装扮表情弹幕",
